@@ -7,3 +7,6 @@
 .externalNativeBuild
 /.idea/
 
+/keys.properties
+/install.gradle
+/bintray.gradle
