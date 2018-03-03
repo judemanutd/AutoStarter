@@ -1,11 +1,11 @@
 apply plugin: 'com.android.library'
 
 ext {
-    bintrayRepo = 'maven'
+    bintrayRepo = 'Maven'
     bintrayName = 'autostarter'
 
     publishedGroupId = 'com.judemanutd'
-    libraryName = 'autostarter'
+    libraryName = 'Autostarter'
     artifact = 'autostarter'
 
     libraryDescription = 'A library to help add your app to android autostart'
@@ -18,7 +18,6 @@ ext {
     developerId = 'judemanutd'
     developerName = 'Jude Fernandes'
     developerEmail = 'jude.manutd@gmail.com'
-    organization = 'Octalogic Tech'
 
     licenseName = 'MIT'
     licenseUrl = 'https://opensource.org/licenses/MIT'
