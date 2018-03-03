@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">AutoStarterExample</string>
+    <string name="open_permission_manager">Open Permission Manager</string>
+</resources>
