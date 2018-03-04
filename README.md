@@ -1,5 +1,7 @@
 # Autostarter
 
+[ ![Download](https://api.bintray.com/packages/judemanutd/Maven/autostarter/images/download.svg) ](https://bintray.com/judemanutd/Maven/autostarter/_latestVersion)
+
 This library helps bring up the autostart permission manager of a phone to the user so they can add
 an app to autostart.
 
