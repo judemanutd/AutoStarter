@@ -1,6 +1,9 @@
 # Autostarter
 
-[ ![Download](https://api.bintray.com/packages/judemanutd/Maven/autostarter/images/download.svg) ](https://bintray.com/judemanutd/Maven/autostarter/_latestVersion)
+[ ![Download](https://api.bintray.com/packages/judemanutd/Maven/autostarter/images/download.svg) ](https://bintray.com/judemanutd/Maven/autostarter/_latestVersion) 
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://opensource.org/licenses/MIT) 
+[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
+
 
 This library helps bring up the autostart permission manager of a phone to the user so they can add
 an app to autostart.
