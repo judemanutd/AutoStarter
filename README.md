@@ -4,6 +4,7 @@
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://opensource.org/licenses/MIT) 
 [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
+<img src="Logotype primary.png" width="80%" height="80%" />
 
 This library helps bring up the autostart permission manager of a phone to the user so they can add
 an app to autostart.
