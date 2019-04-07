@@ -174,11 +174,9 @@ class AutoStartPermissionHelper private constructor() {
     }
 
     companion object {
-        val obj = AutoStartPermissionHelper()
-
         @JvmStatic
         fun getInstance(): AutoStartPermissionHelper {
-            return obj
+            return AutoStartPermissionHelper()
         }
 
     }
