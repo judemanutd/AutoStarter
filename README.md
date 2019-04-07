@@ -1,10 +1,10 @@
 # Autostarter
 
-[ ![Download](https://api.bintray.com/packages/judemanutd/Maven/autostarter/images/download.svg) ](https://bintray.com/judemanutd/Maven/autostarter/_latestVersion) 
+[![Download](https://api.bintray.com/packages/jude-manutd/maven/autostarter/images/download.svg) ](https://bintray.com/jude-manutd/maven/autostarter/_latestVersion)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://opensource.org/licenses/MIT) 
 [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
-<img src="Logotype primary.png" width="80%" height="80%" />
+<img src="Logotype primary.png" width="70%" height="70%" />
 
 This library helps bring up the autostart permission manager of a phone to the user so they can add
 an app to autostart.
@@ -29,23 +29,29 @@ of the autostart permissiong manager.
 
 Add this to your module's `build.gradle` file:
 
-    dependencies {
+```groovy
+dependencies {
         // ... other dependencies
-        implementation 'com.judemanutd:autostarter:1.0.0'
-    }
+        implementation 'com.github.judemanutd:autostarter:1.0.1'
+}
+```
 
 ### Maven
 
-     <dependency>
-       <groupId>com.judemanutd</groupId>
-       <artifactId>autostarter</artifactId>
-       <version>1.0.0</version>
-       <type>pom</type>
-     </dependency>
+```xml
+<dependency>
+    <groupId>com.github.judemanutd</groupId>
+    <artifactId>autostarter</artifactId>
+    <version>1.0.1</version>
+    <type>pom</type>
+</dependency>
+```
  
  Once you have integrated the library calling the following function will bring up the autostart permission manager of the phone.
  
+ ```kotlin
      AutoStartPermissionHelper.getInstance().getAutoStartPermission(context);
+```
      
  In order to keep the library small and simple I have not included any dialogs or pop ups, It is upto you to provide the user with a message if necessary.
  
