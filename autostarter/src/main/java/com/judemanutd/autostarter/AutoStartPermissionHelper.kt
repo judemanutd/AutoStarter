@@ -50,6 +50,14 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_VIVO_COMPONENT_FALLBACK = "com.vivo.permissionmanager.activity.BgStartUpManagerActivity"
     private val PACKAGE_VIVO_COMPONENT_FALLBACK_A = "com.iqoo.secure.ui.phoneoptimize.BgStartUpManager"
 
+    /**
+     * Nokia
+     */
+
+    private val BRAND_NOKIA = "nokia"
+    private val PACKAGE_NOKIA_MAIN = "com.evenwell.powersaving.g3"
+    private val PACKAGE_NOKIA_COMPONENT = "com.evenwell.powersaving.g3.exception.PowerSaverExceptionActivity"
+
     fun getAutoStartPermission(context: Context) {
 
         val build_info = Build.BRAND.toLowerCase()
@@ -65,6 +73,8 @@ class AutoStartPermissionHelper private constructor() {
             BRAND_OPPO -> autoStartOppo(context)
 
             BRAND_VIVO -> autoStartVivo(context)
+
+            BRAND_NOKIA -> autoStartNokia(context)
         }
 
     }
@@ -145,6 +155,16 @@ class AutoStartPermissionHelper private constructor() {
 
             }
 
+        }
+    }
+
+    private fun autoStartNokia(context: Context) {
+        if (isPackageExists(context, PACKAGE_NOKIA_MAIN)) {
+            try {
+                startIntent(context, PACKAGE_NOKIA_MAIN, PACKAGE_NOKIA_COMPONENT)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
         }
     }
 
