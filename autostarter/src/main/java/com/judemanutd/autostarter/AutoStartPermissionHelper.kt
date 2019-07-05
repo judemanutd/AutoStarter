@@ -23,6 +23,13 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_LETV_COMPONENT = "com.letv.android.letvsafe.AutobootManageActivity"
 
     /***
+     * ASUS ROG
+     */
+    private val BRAND_ASUS = "asus"
+    private val PACKAGE_ASUS_MAIN = "com.asus.mobilemanager"
+    private val PACKAGE_ASUS_COMPONENT = "com.asus.mobilemanager.powersaver.PowerSaverSettings"
+
+    /***
      * Honor
      */
     private val BRAND_HONOR = "honor"
@@ -64,6 +71,8 @@ class AutoStartPermissionHelper private constructor() {
 
         when (build_info) {
 
+            BRAND_ASUS -> autoStartAsus(context)
+
             BRAND_XIAOMI -> autoStartXiaomi(context)
 
             BRAND_LETV -> autoStartLetv(context)
@@ -83,6 +92,17 @@ class AutoStartPermissionHelper private constructor() {
         if (isPackageExists(context, PACKAGE_XIAOMI_MAIN)) {
             try {
                 startIntent(context, PACKAGE_XIAOMI_MAIN, PACKAGE_XIAOMI_COMPONENT)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
+    }
+
+    private fun autoStartAsus(context: Context) {
+        if (isPackageExists(context, PACKAGE_ASUS_MAIN)) {
+            try {
+                startIntent(context, PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
