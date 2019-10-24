@@ -72,6 +72,8 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_NOKIA_MAIN = "com.evenwell.powersaving.g3"
     private val PACKAGE_NOKIA_COMPONENT = "com.evenwell.powersaving.g3.exception.PowerSaverExceptionActivity"
 
+    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(PACKAGE_ASUS_MAIN, PACKAGE_XIAOMI_MAIN, PACKAGE_LETV_MAIN, PACKAGE_HONOR_MAIN, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN)
+
     fun getAutoStartPermission(context: Context) {
 
         val build_info = Build.BRAND.toLowerCase()
@@ -95,6 +97,19 @@ class AutoStartPermissionHelper private constructor() {
             BRAND_NOKIA -> autoStartNokia(context)
         }
 
+    }
+
+    fun isAutoStartPermissionAvailable(context: Context): Boolean {
+
+        val packages: List<ApplicationInfo>
+        val pm = context.packageManager
+        packages = pm.getInstalledApplications(0)
+        for (packageInfo in packages) {
+            if (PACKAGES_TO_CHECK_FOR_PERMISSION.contains(packageInfo.packageName)) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun autoStartXiaomi(context: Context) {
