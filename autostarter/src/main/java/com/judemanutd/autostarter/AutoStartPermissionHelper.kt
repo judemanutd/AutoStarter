@@ -36,6 +36,13 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_HONOR_MAIN = "com.huawei.systemmanager"
     private val PACKAGE_HONOR_COMPONENT = "com.huawei.systemmanager.optimize.process.ProtectActivity"
 
+    /***
+     * Huawei
+     */
+    private val BRAND_HUAWEI = "huawei"
+    private val PACKAGE_HUAWEI_MAIN = "com.huawei.systemmanager"
+    private val PACKAGE_HUAWEI_COMPONENT = "com.huawei.systemmanager.optimize.process.ProtectActivity"
+
     /**
      * Oppo
      */
@@ -78,6 +85,8 @@ class AutoStartPermissionHelper private constructor() {
             BRAND_LETV -> autoStartLetv(context)
 
             BRAND_HONOR -> autoStartHonor(context)
+
+            BRAND_HUAWEI -> autoStartHuawei(context)
 
             BRAND_OPPO -> autoStartOppo(context)
 
@@ -125,6 +134,17 @@ class AutoStartPermissionHelper private constructor() {
         if (isPackageExists(context, PACKAGE_HONOR_MAIN)) {
             try {
                 startIntent(context, PACKAGE_HONOR_MAIN, PACKAGE_HONOR_COMPONENT)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
+    }
+
+    private fun autoStartHuawei(context: Context) {
+        if (isPackageExists(context, PACKAGE_HUAWEI_MAIN)) {
+            try {
+                startIntent(context, PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
