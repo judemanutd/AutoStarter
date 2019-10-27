@@ -15,7 +15,7 @@ ext {
     siteUrl = 'https://github.com/judemanutd/AutoStarter'
     gitUrl = 'https://github.com/judemanutd/AutoStarter.git'
 
-    libraryVersion = '1.0.3'
+    libraryVersion = '1.0.4'
 
     developerId = 'judemanutd'
     developerName = 'Jude Fernandes'
@@ -27,12 +27,12 @@ ext {
 }
 
 android {
-    compileSdkVersion 28
+    compileSdkVersion 29
     defaultConfig {
         minSdkVersion 14
-        targetSdkVersion 28
-        versionCode 3
-        versionName "1.0.3"
+        targetSdkVersion 29
+        versionCode 4
+        versionName "1.0.4"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 

@@ -50,7 +50,13 @@ dependencies {
  Once you have integrated the library calling the following function will bring up the autostart permission manager of the phone.
  
  ```kotlin
-     AutoStartPermissionHelper.getInstance().getAutoStartPermission(context);
+     AutoStartPermissionHelper.getInstance().getAutoStartPermission(context)
+```
+
+In order to check if your phone is supported by the library you can call the following command.
+ 
+```kotlin
+     AutoStartPermissionHelper.getInstance().isAutoStartPermissionAvailable(context)
 ```
      
  In order to keep the library small and simple I have not included any dialogs or pop ups, It is upto you to provide the user with a message if necessary.
@@ -65,5 +71,6 @@ dependencies {
  3. Honor [ Untested ]
  4. Oppo [ Untested ]
  5. Vivo [ Untested ]
- 
+ 6. Huawei [ Untested ]
+
  I will be adding support for other manufacturers as and when possible. I am also open to PR's and contributions from others.
