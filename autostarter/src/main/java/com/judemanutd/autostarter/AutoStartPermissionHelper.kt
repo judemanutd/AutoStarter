@@ -36,6 +36,13 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_HONOR_MAIN = "com.huawei.systemmanager"
     private val PACKAGE_HONOR_COMPONENT = "com.huawei.systemmanager.optimize.process.ProtectActivity"
 
+    /***
+     * Huawei
+     */
+    private val BRAND_HUAWEI = "huawei"
+    private val PACKAGE_HUAWEI_MAIN = "com.huawei.systemmanager"
+    private val PACKAGE_HUAWEI_COMPONENT = "com.huawei.systemmanager.optimize.process.ProtectActivity"
+
     /**
      * Oppo
      */
@@ -65,6 +72,8 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_NOKIA_MAIN = "com.evenwell.powersaving.g3"
     private val PACKAGE_NOKIA_COMPONENT = "com.evenwell.powersaving.g3.exception.PowerSaverExceptionActivity"
 
+    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(PACKAGE_ASUS_MAIN, PACKAGE_XIAOMI_MAIN, PACKAGE_LETV_MAIN, PACKAGE_HONOR_MAIN, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN)
+
     fun getAutoStartPermission(context: Context) {
 
         val build_info = Build.BRAND.toLowerCase()
@@ -79,6 +88,8 @@ class AutoStartPermissionHelper private constructor() {
 
             BRAND_HONOR -> autoStartHonor(context)
 
+            BRAND_HUAWEI -> autoStartHuawei(context)
+
             BRAND_OPPO -> autoStartOppo(context)
 
             BRAND_VIVO -> autoStartVivo(context)
@@ -86,6 +97,19 @@ class AutoStartPermissionHelper private constructor() {
             BRAND_NOKIA -> autoStartNokia(context)
         }
 
+    }
+
+    fun isAutoStartPermissionAvailable(context: Context): Boolean {
+
+        val packages: List<ApplicationInfo>
+        val pm = context.packageManager
+        packages = pm.getInstalledApplications(0)
+        for (packageInfo in packages) {
+            if (PACKAGES_TO_CHECK_FOR_PERMISSION.contains(packageInfo.packageName)) {
+                return true
+            }
+        }
+        return false
     }
 
     private fun autoStartXiaomi(context: Context) {
@@ -125,6 +149,17 @@ class AutoStartPermissionHelper private constructor() {
         if (isPackageExists(context, PACKAGE_HONOR_MAIN)) {
             try {
                 startIntent(context, PACKAGE_HONOR_MAIN, PACKAGE_HONOR_COMPONENT)
+            } catch (e: Exception) {
+                e.printStackTrace()
+            }
+
+        }
+    }
+
+    private fun autoStartHuawei(context: Context) {
+        if (isPackageExists(context, PACKAGE_HUAWEI_MAIN)) {
+            try {
+                startIntent(context, PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
             }
