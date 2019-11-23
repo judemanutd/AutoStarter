@@ -47,7 +47,7 @@ dependencies {
 </dependency>
 ```
  
- Once you have integrated the library calling the following function will bring up the autostart permission manager of the phone.
+ Once you have integrated the library calling the following function will bring up the autostart permission manager of the phone. The function returns a boolean to indicate if the action was as success or a failure.
  
  ```kotlin
      AutoStartPermissionHelper.getInstance().getAutoStartPermission(context)
@@ -67,10 +67,11 @@ In order to check if your phone is supported by the library you can call the fol
  As of now the library has support for the following manufacturers :
  
  1. Xiaomi
- 2. Letv
- 3. Honor [ Untested ]
- 4. Oppo [ Untested ]
- 5. Vivo [ Untested ]
- 6. Huawei [ Untested ]
+ 2. Redmi
+ 3. Letv
+ 4. Honor [ Untested ]
+ 5. Oppo [ Untested ]
+ 6. Vivo [ Untested ]
+ 7. Huawei [ Untested ]
 
  I will be adding support for other manufacturers as and when possible. I am also open to PR's and contributions from others.
