@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
 import android.os.Build
+import java.util.*
 
 class AutoStartPermissionHelper private constructor() {
 
@@ -12,6 +13,7 @@ class AutoStartPermissionHelper private constructor() {
      * Xiaomi
      */
     private val BRAND_XIAOMI = "xiaomi"
+    private val BRAND_XIAOMI_REDMI = "redmi"
     private val PACKAGE_XIAOMI_MAIN = "com.miui.securitycenter"
     private val PACKAGE_XIAOMI_COMPONENT = "com.miui.permcenter.autostart.AutoStartManagementActivity"
 
@@ -74,27 +76,29 @@ class AutoStartPermissionHelper private constructor() {
 
     private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(PACKAGE_ASUS_MAIN, PACKAGE_XIAOMI_MAIN, PACKAGE_LETV_MAIN, PACKAGE_HONOR_MAIN, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN)
 
-    fun getAutoStartPermission(context: Context) {
+    fun getAutoStartPermission(context: Context): Boolean {
 
-        val build_info = Build.BRAND.toLowerCase()
+        when (Build.BRAND.toLowerCase(Locale.getDefault())) {
 
-        when (build_info) {
+            BRAND_ASUS -> return autoStartAsus(context)
 
-            BRAND_ASUS -> autoStartAsus(context)
+            BRAND_XIAOMI, BRAND_XIAOMI_REDMI -> return autoStartXiaomi(context)
 
-            BRAND_XIAOMI -> autoStartXiaomi(context)
+            BRAND_LETV -> return autoStartLetv(context)
 
-            BRAND_LETV -> autoStartLetv(context)
+            BRAND_HONOR -> return autoStartHonor(context)
 
-            BRAND_HONOR -> autoStartHonor(context)
+            BRAND_HUAWEI -> return autoStartHuawei(context)
 
-            BRAND_HUAWEI -> autoStartHuawei(context)
+            BRAND_OPPO -> return autoStartOppo(context)
 
-            BRAND_OPPO -> autoStartOppo(context)
+            BRAND_VIVO -> return autoStartVivo(context)
 
-            BRAND_VIVO -> autoStartVivo(context)
+            BRAND_NOKIA -> return autoStartNokia(context)
 
-            BRAND_NOKIA -> autoStartNokia(context)
+            else -> {
+                return false
+            }
         }
 
     }
@@ -112,62 +116,82 @@ class AutoStartPermissionHelper private constructor() {
         return false
     }
 
-    private fun autoStartXiaomi(context: Context) {
+    private fun autoStartXiaomi(context: Context): Boolean {
         if (isPackageExists(context, PACKAGE_XIAOMI_MAIN)) {
             try {
                 startIntent(context, PACKAGE_XIAOMI_MAIN, PACKAGE_XIAOMI_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
+                return false
             }
-
+        } else {
+            return false
         }
+
+        return true
     }
 
-    private fun autoStartAsus(context: Context) {
+    private fun autoStartAsus(context: Context): Boolean {
         if (isPackageExists(context, PACKAGE_ASUS_MAIN)) {
             try {
                 startIntent(context, PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
+                return false
             }
-
+        } else {
+            return false
         }
+
+        return true
     }
 
-    private fun autoStartLetv(context: Context) {
+    private fun autoStartLetv(context: Context): Boolean {
         if (isPackageExists(context, PACKAGE_LETV_MAIN)) {
             try {
                 startIntent(context, PACKAGE_LETV_MAIN, PACKAGE_LETV_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
+                return false
             }
-
+        } else {
+            return false
         }
+
+        return true
     }
 
-    private fun autoStartHonor(context: Context) {
+    private fun autoStartHonor(context: Context): Boolean {
         if (isPackageExists(context, PACKAGE_HONOR_MAIN)) {
             try {
                 startIntent(context, PACKAGE_HONOR_MAIN, PACKAGE_HONOR_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
+                return false
             }
-
+        } else {
+            return false
         }
+
+        return true
     }
 
-    private fun autoStartHuawei(context: Context) {
+    private fun autoStartHuawei(context: Context): Boolean {
         if (isPackageExists(context, PACKAGE_HUAWEI_MAIN)) {
             try {
                 startIntent(context, PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
+                return false
             }
-
+        } else {
+            return false
         }
+
+        return true
     }
 
-    private fun autoStartOppo(context: Context) {
+    private fun autoStartOppo(context: Context): Boolean {
         if (isPackageExists(context, PACKAGE_OPPO_MAIN) || isPackageExists(context, PACKAGE_OPPO_FALLBACK)) {
             try {
                 startIntent(context, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT)
@@ -181,16 +205,20 @@ class AutoStartPermissionHelper private constructor() {
                         startIntent(context, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT_FALLBACK_A)
                     } catch (exx: Exception) {
                         exx.printStackTrace()
+                        return false
                     }
 
                 }
 
             }
-
+        } else {
+            return false
         }
+
+        return true
     }
 
-    private fun autoStartVivo(context: Context) {
+    private fun autoStartVivo(context: Context): Boolean {
         if (isPackageExists(context, PACKAGE_VIVO_MAIN) || isPackageExists(context, PACKAGE_VIVO_FALLBACK)) {
             try {
                 startIntent(context, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT)
@@ -204,23 +232,32 @@ class AutoStartPermissionHelper private constructor() {
                         startIntent(context, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT_FALLBACK_A)
                     } catch (exx: Exception) {
                         exx.printStackTrace()
+                        return false
                     }
 
                 }
 
             }
-
+        } else {
+            return false
         }
+
+        return true
     }
 
-    private fun autoStartNokia(context: Context) {
+    private fun autoStartNokia(context: Context): Boolean {
         if (isPackageExists(context, PACKAGE_NOKIA_MAIN)) {
             try {
                 startIntent(context, PACKAGE_NOKIA_MAIN, PACKAGE_NOKIA_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
+                return false
             }
+        } else {
+            return false
         }
+
+        return true
     }
 
     @Throws(Exception::class)
@@ -233,7 +270,6 @@ class AutoStartPermissionHelper private constructor() {
             exception.printStackTrace()
             throw exception
         }
-
     }
 
     private fun isPackageExists(context: Context, targetPackage: String): Boolean {
