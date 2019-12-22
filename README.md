@@ -32,7 +32,7 @@ Add this to your module's `build.gradle` file:
 ```groovy
 dependencies {
         // ... other dependencies
-        implementation 'com.github.judemanutd:autostarter:1.0.5'
+        implementation 'com.github.judemanutd:autostarter:1.0.6'
 }
 ```
 
@@ -42,7 +42,7 @@ dependencies {
 <dependency>
     <groupId>com.github.judemanutd</groupId>
     <artifactId>autostarter</artifactId>
-    <version>1.0.5</version>
+    <version>1.0.6</version>
     <type>pom</type>
 </dependency>
 ```
@@ -72,6 +72,16 @@ In order to check if your phone is supported by the library you can call the fol
  4. Honor [ Untested ]
  5. Oppo [ Untested ]
  6. Vivo [ Untested ]
- 7. Huawei [ Untested ]
+ 7. Huawei
 
  I will be adding support for other manufacturers as and when possible. I am also open to PR's and contributions from others.
+
+## Related Info
+
+Since this depends entirely on the OEM and not on android itself, the underlying component that this library makes use of is continuously changing.
+Do check out these repositories for further information on this issue
+
+- [dont-kill-my-app](https://github.com/urbandroid-team/dont-kill-my-app)
+- [backgroundable-android](https://github.com/dirkam/backgroundable-android)
+- [AppKillerManager](https://github.com/thelittlefireman/AppKillerManager)
+- [CRomAppWhitelist](https://github.com/WanghongLin/CRomAppWhitelist)

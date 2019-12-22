@@ -44,6 +44,7 @@ class AutoStartPermissionHelper private constructor() {
     private val BRAND_HUAWEI = "huawei"
     private val PACKAGE_HUAWEI_MAIN = "com.huawei.systemmanager"
     private val PACKAGE_HUAWEI_COMPONENT = "com.huawei.systemmanager.optimize.process.ProtectActivity"
+    private val PACKAGE_HUAWEI_COMPONENT_FALLBACK = "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity"
 
     /**
      * Oppo
@@ -74,7 +75,14 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_NOKIA_MAIN = "com.evenwell.powersaving.g3"
     private val PACKAGE_NOKIA_COMPONENT = "com.evenwell.powersaving.g3.exception.PowerSaverExceptionActivity"
 
-    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(PACKAGE_ASUS_MAIN, PACKAGE_XIAOMI_MAIN, PACKAGE_LETV_MAIN, PACKAGE_HONOR_MAIN, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN)
+    /***
+     * Samsung
+     */
+    private val BRAND_SAMSUNG = "samsung"
+    private val PACKAGE_SAMSUNG_MAIN = "com.samsung.android.lool"
+    private val PACKAGE_SAMSUNG_COMPONENT = "com.samsung.android.sm.ui.battery.BatteryActivity"
+
+    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(PACKAGE_ASUS_MAIN, PACKAGE_XIAOMI_MAIN, PACKAGE_LETV_MAIN, PACKAGE_HONOR_MAIN, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN, PACKAGE_SAMSUNG_MAIN)
 
     fun getAutoStartPermission(context: Context): Boolean {
 
@@ -95,6 +103,8 @@ class AutoStartPermissionHelper private constructor() {
             BRAND_VIVO -> return autoStartVivo(context)
 
             BRAND_NOKIA -> return autoStartNokia(context)
+
+            BRAND_SAMSUNG -> return autoStartSamsung(context)
 
             else -> {
                 return false
@@ -182,6 +192,12 @@ class AutoStartPermissionHelper private constructor() {
                 startIntent(context, PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
+                try {
+                    startIntent(context, PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT_FALLBACK)
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                    return false
+                }
                 return false
             }
         } else {
@@ -249,6 +265,21 @@ class AutoStartPermissionHelper private constructor() {
         if (isPackageExists(context, PACKAGE_NOKIA_MAIN)) {
             try {
                 startIntent(context, PACKAGE_NOKIA_MAIN, PACKAGE_NOKIA_COMPONENT)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return false
+            }
+        } else {
+            return false
+        }
+
+        return true
+    }
+
+    private fun autoStartSamsung(context: Context): Boolean {
+        if (isPackageExists(context, PACKAGE_SAMSUNG_MAIN)) {
+            try {
+                startIntent(context, PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
                 return false
