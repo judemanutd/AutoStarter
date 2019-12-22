@@ -73,6 +73,7 @@ In order to check if your phone is supported by the library you can call the fol
  5. Oppo [ Untested ]
  6. Vivo [ Untested ]
  7. Huawei
+ 8. Samsung
 
  I will be adding support for other manufacturers as and when possible. I am also open to PR's and contributions from others.
 
