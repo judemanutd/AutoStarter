@@ -30,6 +30,7 @@ class AutoStartPermissionHelper private constructor() {
     private val BRAND_ASUS = "asus"
     private val PACKAGE_ASUS_MAIN = "com.asus.mobilemanager"
     private val PACKAGE_ASUS_COMPONENT = "com.asus.mobilemanager.powersaver.PowerSaverSettings"
+    private val PACKAGE_ASUS_COMPONENT_FALLBACK = "com.asus.mobilemanager.autostart.AutoStartActivity"
 
     /***
      * Honor
@@ -147,7 +148,12 @@ class AutoStartPermissionHelper private constructor() {
                 startIntent(context, PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
-                return false
+                try {
+                    startIntent(context, PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT_FALLBACK)
+                } catch (ex: Exception) {
+                    ex.printStackTrace()
+                    return false
+                }
             }
         } else {
             return false
@@ -198,7 +204,6 @@ class AutoStartPermissionHelper private constructor() {
                     ex.printStackTrace()
                     return false
                 }
-                return false
             }
         } else {
             return false
@@ -223,9 +228,7 @@ class AutoStartPermissionHelper private constructor() {
                         exx.printStackTrace()
                         return false
                     }
-
                 }
-
             }
         } else {
             return false
@@ -250,9 +253,7 @@ class AutoStartPermissionHelper private constructor() {
                         exx.printStackTrace()
                         return false
                     }
-
                 }
-
             }
         } else {
             return false
