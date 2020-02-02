@@ -83,7 +83,15 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_SAMSUNG_MAIN = "com.samsung.android.lool"
     private val PACKAGE_SAMSUNG_COMPONENT = "com.samsung.android.sm.ui.battery.BatteryActivity"
 
-    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(PACKAGE_ASUS_MAIN, PACKAGE_XIAOMI_MAIN, PACKAGE_LETV_MAIN, PACKAGE_HONOR_MAIN, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN, PACKAGE_SAMSUNG_MAIN)
+    /***
+     * One plus
+     */
+    private val BRAND_ONE_PLUS = "oneplus"
+    private val PACKAGE_ONE_PLUS_MAIN = "com.oneplus.security"
+    private val PACKAGE_ONE_PLUS_COMPONENT = "com.oneplus.security.chainlaunch.view.ChainLaunchAppListActivity"
+
+    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(PACKAGE_ASUS_MAIN, PACKAGE_XIAOMI_MAIN, PACKAGE_LETV_MAIN, PACKAGE_HONOR_MAIN, PACKAGE_OPPO_MAIN,
+            PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN, PACKAGE_SAMSUNG_MAIN, PACKAGE_ONE_PLUS_MAIN)
 
     fun getAutoStartPermission(context: Context): Boolean {
 
@@ -106,6 +114,8 @@ class AutoStartPermissionHelper private constructor() {
             BRAND_NOKIA -> return autoStartNokia(context)
 
             BRAND_SAMSUNG -> return autoStartSamsung(context)
+
+            BRAND_ONE_PLUS -> return autoStartOnePlus(context)
 
             else -> {
                 return false
@@ -281,6 +291,21 @@ class AutoStartPermissionHelper private constructor() {
         if (isPackageExists(context, PACKAGE_SAMSUNG_MAIN)) {
             try {
                 startIntent(context, PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT)
+            } catch (e: Exception) {
+                e.printStackTrace()
+                return false
+            }
+        } else {
+            return false
+        }
+
+        return true
+    }
+
+    private fun autoStartOnePlus(context: Context): Boolean {
+        if (isPackageExists(context, PACKAGE_ONE_PLUS_MAIN)) {
+            try {
+                startIntent(context, PACKAGE_ONE_PLUS_MAIN, PACKAGE_ONE_PLUS_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
                 return false

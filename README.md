@@ -32,7 +32,7 @@ Add this to your module's `build.gradle` file:
 ```groovy
 dependencies {
         // ... other dependencies
-        implementation 'com.github.judemanutd:autostarter:1.0.7'
+        implementation 'com.github.judemanutd:autostarter:1.0.8'
 }
 ```
 
@@ -42,7 +42,7 @@ dependencies {
 <dependency>
     <groupId>com.github.judemanutd</groupId>
     <artifactId>autostarter</artifactId>
-    <version>1.0.7</version>
+    <version>1.0.8</version>
     <type>pom</type>
 </dependency>
 ```
@@ -75,6 +75,7 @@ In order to check if your phone is supported by the library you can call the fol
  7. Huawei
  8. Samsung
  9. Asus
+ 10. One Plus [ Untested ]
 
  I will be adding support for other manufacturers as and when possible. I am also open to PR's and contributions from others.
 
