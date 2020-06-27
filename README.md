@@ -1,7 +1,8 @@
-# OEMBatteryWhitelist (Original known as: [AutoStart](https://github.com/judemanutd/AutoStarter))
+# Autostarter
 
-# Xamarin version
-Library ported to Xamarin by [Adi-Marian Mutu](https://github.com/Xxshark888xX), all the thanks and credits should go to [judemanutd](https://github.com/judemanutd)
+[![Download](https://api.bintray.com/packages/jude-manutd/maven/autostarter/images/download.svg) ](https://bintray.com/jude-manutd/maven/autostarter/_latestVersion)
+[![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://opensource.org/licenses/MIT) 
+[![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://opensource.org/licenses/MIT) 
 [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
@@ -25,7 +26,46 @@ Unfortunately since this is an OEM specific problem and not an android sdk probl
 Each manufacturer has their own version of it with different package names, hence this library was created to curate a list of all the packages used by each OEM for their version
 of the autostart permissiong manager.
 
-# Usage
+# Usage Kotlin
+
+### Gradle
+
+Add this to your module's `build.gradle` file:
+
+```groovy
+dependencies {
+        // ... other dependencies
+        implementation 'com.github.judemanutd:autostarter:1.0.8'
+}
+```
+
+### Maven
+
+```xml
+<dependency>
+    <groupId>com.github.judemanutd</groupId>
+    <artifactId>autostarter</artifactId>
+    <version>1.0.8</version>
+    <type>pom</type>
+</dependency>
+```
+ 
+ Once you have integrated the library calling the following function will bring up the autostart permission manager of the phone. The function returns a boolean to indicate if the action was as success or a failure.
+ 
+ ```kotlin
+     AutoStartPermissionHelper.getInstance().getAutoStartPermission(context)
+```
+
+In order to check if your phone is supported by the library you can call the following command.
+ 
+```kotlin
+     AutoStartPermissionHelper.getInstance().isAutoStartPermissionAvailable(context)
+```
+
+# Xamarin version
+Library ported to Xamarin by [Adi-Marian Mutu](https://github.com/Xxshark888xX)
+
+# Usage C#
 
 ```c#
 OEMBatteryWhitelist batteryWhitelist = new OEMBatteryWhitelist(Android.App.Application.Context);
