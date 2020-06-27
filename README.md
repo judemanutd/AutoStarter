@@ -1,10 +1,12 @@
-# Autostarter
+# OEMBatteryWhitelist (Original known as: [AutoStart](https://github.com/judemanutd/AutoStarter))
 
-[![Download](https://api.bintray.com/packages/jude-manutd/maven/autostarter/images/download.svg) ](https://bintray.com/jude-manutd/maven/autostarter/_latestVersion)
+# Xamarin version
+Library ported to Xamarin by [Adi-Marian Mutu](https://github.com/Xxshark888xX), all the thanks and credits should go to [judemanutd](https://github.com/judemanutd)
+
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://opensource.org/licenses/MIT) 
 [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
-<img src="Logotype primary.png" width="70%" height="70%" />
+<img src="https://github.com/judemanutd/AutoStarter/raw/master/Logotype%20primary.png" width="70%" height="70%" />
 
 This library helps bring up the autostart permission manager of a phone to the user so they can add
 an app to autostart.
@@ -25,38 +27,22 @@ of the autostart permissiong manager.
 
 # Usage
 
-### Gradle
+```c#
+OEMBatteryWhitelist batteryWhitelist = new OEMBatteryWhitelist(Android.App.Application.Context);
 
-Add this to your module's `build.gradle` file:
-
-```groovy
-dependencies {
-        // ... other dependencies
-        implementation 'com.github.judemanutd:autostarter:1.0.8'
+if (batteryWhitelist.CanRequestPermissions) {
+  /* INFORM HERE THE USER WITH A POPUP MESSAGE */
+  
+  // Used in order to get the exception object if something goes wrong
+  Exception batteryWhitelistEx;
+  
+  if ((batteryWhitelistEx = batteryWhitelist.RequestPermissions()) == null) {
+    // SUCCESS
+  } else {
+    // Something went wrong
+    // You can check the exception by accessing the batteryWhitelistEx object
+  }
 }
-```
-
-### Maven
-
-```xml
-<dependency>
-    <groupId>com.github.judemanutd</groupId>
-    <artifactId>autostarter</artifactId>
-    <version>1.0.8</version>
-    <type>pom</type>
-</dependency>
-```
- 
- Once you have integrated the library calling the following function will bring up the autostart permission manager of the phone. The function returns a boolean to indicate if the action was as success or a failure.
- 
- ```kotlin
-     AutoStartPermissionHelper.getInstance().getAutoStartPermission(context)
-```
-
-In order to check if your phone is supported by the library you can call the following command.
- 
-```kotlin
-     AutoStartPermissionHelper.getInstance().isAutoStartPermissionAvailable(context)
 ```
      
  In order to keep the library small and simple I have not included any dialogs or pop ups, It is upto you to provide the user with a message if necessary.
