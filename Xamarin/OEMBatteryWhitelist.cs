@@ -91,11 +91,6 @@ namespace CGSJDSportsNotification {
             PACKAGE_ONE_PLUS_MAIN
         };
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context">Context object to be used</param>
-        /// <param name="exObjectReturn">If any exception will raise, access this object for more info</param>
         public OEMBatteryWhitelist(Context context) {
             Context    = context;
         }
@@ -117,8 +112,7 @@ namespace CGSJDSportsNotification {
         public bool CanRequestPermissions { get { return IsRequestPermissionsAvailable; } }
 
         /// <summary>
-        /// Returns false when the process failed
-        /// <para>Returns null when the operation succeeded and the exception object when failed</para>
+        /// Returns null when the operation succeeded and the exception object when failed
         /// </summary>
         public Exception RequestPermissions() {
             return _requestPermissions() == true ? null : Exception;
