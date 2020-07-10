@@ -11,7 +11,7 @@ namespace CGSJDSportsNotification {
         Exception Exception;
         Context Context { get; set; }
 
-        readonly string CURRENT_BRAND = Build.Brand.ToLower(CultureInfo.CurrentCulture);
+        readonly string CURRENT_BRAND = Build.Brand.ToLower();
 
         /* XIAOMI */
         const string BRAND_XIAOMI = "xiaomi";
@@ -50,7 +50,6 @@ namespace CGSJDSportsNotification {
         const string PACKAGE_OPPO_COMPONENT_FALLBACK_A = "com.coloros.safecenter.startupapp.StartupAppListActivity";
 
         /* VIVO */
-
         const string BRAND_VIVO = "vivo";
         const string PACKAGE_VIVO_MAIN = "com.iqoo.secure";
         const string PACKAGE_VIVO_FALLBACK = "com.vivo.permissionmanager";
@@ -59,19 +58,16 @@ namespace CGSJDSportsNotification {
         const string PACKAGE_VIVO_COMPONENT_FALLBACK_A = "com.iqoo.secure.ui.phoneoptimize.BgStartUpManager";
 
         /* NOKIA */
-
         const string BRAND_NOKIA = "nokia";
         const string PACKAGE_NOKIA_MAIN = "com.evenwell.powersaving.g3";
         const string PACKAGE_NOKIA_COMPONENT = "com.evenwell.powersaving.g3.exception.PowerSaverExceptionActivity";
 
         /* SAMSUNG */
-
         const string BRAND_SAMSUNG = "samsung";
         const string PACKAGE_SAMSUNG_MAIN = "com.samsung.android.lool";
         const string PACKAGE_SAMSUNG_COMPONENT = "com.samsung.android.sm.ui.battery.BatteryActivity";
 
         /* ONE PLUS */
-
         const string BRAND_ONE_PLUS = "oneplus";
         const string PACKAGE_ONE_PLUS_MAIN = "com.oneplus.security";
         const string PACKAGE_ONE_PLUS_COMPONENT = "com.oneplus.security.chainlaunch.view.ChainLaunchAppListActivity";
