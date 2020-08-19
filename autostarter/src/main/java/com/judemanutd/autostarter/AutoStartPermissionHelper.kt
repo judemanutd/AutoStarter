@@ -4,7 +4,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import java.util.*
 
 class AutoStartPermissionHelper private constructor() {
@@ -56,6 +58,9 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_OPPO_COMPONENT = "com.coloros.safecenter.permission.startup.StartupAppListActivity"
     private val PACKAGE_OPPO_COMPONENT_FALLBACK = "com.oppo.safe.permission.startup.StartupAppListActivity"
     private val PACKAGE_OPPO_COMPONENT_FALLBACK_A = "com.coloros.safecenter.startupapp.StartupAppListActivity"
+    private val OPPO_AUTOSTART_IN_APP_INFO_SUPPORTED_DEVICES = arrayOf(
+        "CPH1893", "CPH1877" //Rx17 Neo, Rx17 Pro
+    )
 
     /**
      * Vivo
@@ -94,7 +99,6 @@ class AutoStartPermissionHelper private constructor() {
             PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN, PACKAGE_SAMSUNG_MAIN, PACKAGE_ONE_PLUS_MAIN)
 
     fun getAutoStartPermission(context: Context): Boolean {
-
         when (Build.BRAND.toLowerCase(Locale.getDefault())) {
 
             BRAND_ASUS -> return autoStartAsus(context)
@@ -240,6 +244,13 @@ class AutoStartPermissionHelper private constructor() {
                     }
                 }
             }
+        } else if (OPPO_AUTOSTART_IN_APP_INFO_SUPPORTED_DEVICES.contains(Build.DEVICE)
+                   || OPPO_AUTOSTART_IN_APP_INFO_SUPPORTED_DEVICES.contains(Build.PRODUCT)) {
+            val i = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            i.addCategory(Intent.CATEGORY_DEFAULT)
+            i.data = Uri.parse("package:${context.packageName}")
+            context.startActivity(i)
+            return true
         } else {
             return false
         }
