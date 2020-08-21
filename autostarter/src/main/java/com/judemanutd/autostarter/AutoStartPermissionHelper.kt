@@ -58,9 +58,6 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_OPPO_COMPONENT = "com.coloros.safecenter.permission.startup.StartupAppListActivity"
     private val PACKAGE_OPPO_COMPONENT_FALLBACK = "com.oppo.safe.permission.startup.StartupAppListActivity"
     private val PACKAGE_OPPO_COMPONENT_FALLBACK_A = "com.coloros.safecenter.startupapp.StartupAppListActivity"
-    private val OPPO_AUTOSTART_IN_APP_INFO_SUPPORTED_DEVICES = arrayOf(
-        "CPH1893", "CPH1877" //Rx17 Neo, Rx17 Pro
-    )
 
     /**
      * Vivo
@@ -240,22 +237,27 @@ class AutoStartPermissionHelper private constructor() {
                         startIntent(context, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT_FALLBACK_A)
                     } catch (exx: Exception) {
                         exx.printStackTrace()
-                        return false
+                        return launchOppoAppInfo(context)
                     }
                 }
             }
-        } else if (OPPO_AUTOSTART_IN_APP_INFO_SUPPORTED_DEVICES.contains(Build.DEVICE)
-                   || OPPO_AUTOSTART_IN_APP_INFO_SUPPORTED_DEVICES.contains(Build.PRODUCT)) {
+        } else {
+            return launchOppoAppInfo(context)
+        }
+        return true
+    }
+
+    private fun launchOppoAppInfo(context: Context): Boolean {
+        return try {
             val i = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             i.addCategory(Intent.CATEGORY_DEFAULT)
             i.data = Uri.parse("package:${context.packageName}")
             context.startActivity(i)
-            return true
-        } else {
-            return false
+            true
+        } catch (exx: Exception) {
+            exx.printStackTrace()
+            false
         }
-
-        return true
     }
 
     private fun autoStartVivo(context: Context): Boolean {
