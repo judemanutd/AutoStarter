@@ -95,7 +95,7 @@ class AutoStartPermissionHelper private constructor() {
 
     fun getAutoStartPermission(context: Context): Boolean {
 
-        when (Build.BRAND.toLowerCase()) {
+        when (Build.BRAND.toLowerCase(Locale.ENGLISH)) {
 
             BRAND_ASUS -> return autoStartAsus(context)
 
