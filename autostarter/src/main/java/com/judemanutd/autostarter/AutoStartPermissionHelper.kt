@@ -140,6 +140,7 @@ class AutoStartPermissionHelper private constructor() {
     private fun autoStartXiaomi(context: Context): Boolean {
         if (isPackageExists(context, PACKAGE_XIAOMI_MAIN)) {
             try {
+                
                 startIntent(context, PACKAGE_XIAOMI_MAIN, PACKAGE_XIAOMI_COMPONENT)
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -322,6 +323,7 @@ class AutoStartPermissionHelper private constructor() {
         try {
             val intent = Intent()
             intent.component = ComponentName(packageName, componentName)
+             intent.flags =  Intent.FLAG_ACTIVITY_NEW_TASK
             context.startActivity(intent)
         } catch (exception: Exception) {
             exception.printStackTrace()
