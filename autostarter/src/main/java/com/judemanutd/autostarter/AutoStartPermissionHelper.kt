@@ -14,6 +14,7 @@ class AutoStartPermissionHelper private constructor() {
      */
     private val BRAND_XIAOMI = "xiaomi"
     private val BRAND_XIAOMI_REDMI = "redmi"
+    private val BRAND_XIAOMI_POCO = "poco"
     private val PACKAGE_XIAOMI_MAIN = "com.miui.securitycenter"
     private val PACKAGE_XIAOMI_COMPONENT = "com.miui.permcenter.autostart.AutoStartManagementActivity"
 
@@ -99,7 +100,7 @@ class AutoStartPermissionHelper private constructor() {
 
             BRAND_ASUS -> return autoStartAsus(context)
 
-            BRAND_XIAOMI, BRAND_XIAOMI_REDMI -> return autoStartXiaomi(context)
+            BRAND_XIAOMI, BRAND_XIAOMI_REDMI ,BRAND_XIAOMI_POCO -> return autoStartXiaomi(context)
 
             BRAND_LETV -> return autoStartLetv(context)
 
