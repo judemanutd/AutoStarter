@@ -1,5 +1,6 @@
 package com.judemanutd.autostarter
 
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -82,6 +83,7 @@ class AutoStartPermissionHelper private constructor() {
     private val BRAND_SAMSUNG = "samsung"
     private val PACKAGE_SAMSUNG_MAIN = "com.samsung.android.lool"
     private val PACKAGE_SAMSUNG_COMPONENT = "com.samsung.android.sm.ui.battery.BatteryActivity"
+    private val PACKAGE_SAMSUNG_COMPONENT_2 = "com.samsung.android.sm.battery.ui.BatteryActivity"
 
     /***
      * One plus
@@ -291,6 +293,14 @@ class AutoStartPermissionHelper private constructor() {
         if (isPackageExists(context, PACKAGE_SAMSUNG_MAIN)) {
             try {
                 startIntent(context, PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT)
+            } catch (a: ActivityNotFoundException) {
+                // Try with the another package component
+                try {
+                    startIntent(context, PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT_2)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return false
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
                 return false
