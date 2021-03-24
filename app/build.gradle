@@ -3,13 +3,13 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     defaultConfig {
         applicationId "com.judemanutd.autostarterexample"
         minSdkVersion 14
-        targetSdkVersion 29
-        versionCode 3
-        versionName "1.0.3"
+        targetSdkVersion 30
+        versionCode 4
+        versionName "1.0.4"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
 

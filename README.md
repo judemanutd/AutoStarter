@@ -32,7 +32,7 @@ Add this to your module's `build.gradle` file:
 ```groovy
 dependencies {
         // ... other dependencies
-        implementation 'com.github.judemanutd:autostarter:1.0.8'
+        implementation 'com.github.judemanutd:autostarter:1.0.9'
 }
 ```
 
@@ -42,7 +42,7 @@ dependencies {
 <dependency>
     <groupId>com.github.judemanutd</groupId>
     <artifactId>autostarter</artifactId>
-    <version>1.0.8</version>
+    <version>1.0.9</version>
     <type>pom</type>
 </dependency>
 ```
