@@ -1,5 +1,6 @@
 package com.judemanutd.autostarter
 
+import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
@@ -15,6 +16,7 @@ class AutoStartPermissionHelper private constructor() {
      * Xiaomi
      */
     private val BRAND_XIAOMI = "xiaomi"
+    private val BRAND_XIAOMI_POCO = "poco"
     private val BRAND_XIAOMI_REDMI = "redmi"
     private val PACKAGE_XIAOMI_MAIN = "com.miui.securitycenter"
     private val PACKAGE_XIAOMI_COMPONENT = "com.miui.permcenter.autostart.AutoStartManagementActivity"
@@ -84,6 +86,7 @@ class AutoStartPermissionHelper private constructor() {
     private val BRAND_SAMSUNG = "samsung"
     private val PACKAGE_SAMSUNG_MAIN = "com.samsung.android.lool"
     private val PACKAGE_SAMSUNG_COMPONENT = "com.samsung.android.sm.ui.battery.BatteryActivity"
+    private val PACKAGE_SAMSUNG_COMPONENT_2 = "com.samsung.android.sm.battery.ui.BatteryActivity"
 
     /***
      * One plus
@@ -96,11 +99,12 @@ class AutoStartPermissionHelper private constructor() {
             PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN, PACKAGE_SAMSUNG_MAIN, PACKAGE_ONE_PLUS_MAIN)
 
     fun getAutoStartPermission(context: Context): Boolean {
+
         when (Build.BRAND.toLowerCase(Locale.getDefault())) {
 
             BRAND_ASUS -> return autoStartAsus(context)
 
-            BRAND_XIAOMI, BRAND_XIAOMI_REDMI -> return autoStartXiaomi(context)
+            BRAND_XIAOMI, BRAND_XIAOMI_POCO, BRAND_XIAOMI_REDMI -> return autoStartXiaomi(context)
 
             BRAND_LETV -> return autoStartLetv(context)
 
@@ -304,6 +308,14 @@ class AutoStartPermissionHelper private constructor() {
         if (isPackageExists(context, PACKAGE_SAMSUNG_MAIN)) {
             try {
                 startIntent(context, PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT)
+            } catch (a: ActivityNotFoundException) {
+                // Try with the another package component
+                try {
+                    startIntent(context, PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT_2)
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    return false
+                }
             } catch (e: Exception) {
                 e.printStackTrace()
                 return false
