@@ -5,7 +5,9 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.net.Uri
 import android.os.Build
+import android.provider.Settings
 import java.util.*
 
 class AutoStartPermissionHelper private constructor() {
@@ -98,7 +100,7 @@ class AutoStartPermissionHelper private constructor() {
 
     fun getAutoStartPermission(context: Context): Boolean {
 
-        when (Build.BRAND.toLowerCase(Locale.ENGLISH)) {
+        when (Build.BRAND.toLowerCase(Locale.getDefault())) {
 
             BRAND_ASUS -> return autoStartAsus(context)
 
@@ -239,15 +241,27 @@ class AutoStartPermissionHelper private constructor() {
                         startIntent(context, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT_FALLBACK_A)
                     } catch (exx: Exception) {
                         exx.printStackTrace()
-                        return false
+                        return launchOppoAppInfo(context)
                     }
                 }
             }
         } else {
-            return false
+            return launchOppoAppInfo(context)
         }
-
         return true
+    }
+
+    private fun launchOppoAppInfo(context: Context): Boolean {
+        return try {
+            val i = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
+            i.addCategory(Intent.CATEGORY_DEFAULT)
+            i.data = Uri.parse("package:${context.packageName}")
+            context.startActivity(i)
+            true
+        } catch (exx: Exception) {
+            exx.printStackTrace()
+            false
+        }
     }
 
     private fun autoStartVivo(context: Context): Boolean {
