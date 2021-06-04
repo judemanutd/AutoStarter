@@ -1,10 +1,10 @@
 package com.judemanutd.autostarter
 
-import android.content.ActivityNotFoundException
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.pm.ApplicationInfo
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
 import android.provider.Settings
@@ -48,8 +48,8 @@ class AutoStartPermissionHelper private constructor() {
      */
     private val BRAND_HUAWEI = "huawei"
     private val PACKAGE_HUAWEI_MAIN = "com.huawei.systemmanager"
-    private val PACKAGE_HUAWEI_COMPONENT = "com.huawei.systemmanager.optimize.process.ProtectActivity"
-    private val PACKAGE_HUAWEI_COMPONENT_FALLBACK = "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity"
+    private val PACKAGE_HUAWEI_COMPONENT = "com.huawei.systemmanager.startupmgr.ui.StartupNormalAppListActivity"
+    private val PACKAGE_HUAWEI_COMPONENT_FALLBACK = "com.huawei.systemmanager.optimize.process.ProtectActivity"
 
     /**
      * Oppo
@@ -86,7 +86,8 @@ class AutoStartPermissionHelper private constructor() {
     private val BRAND_SAMSUNG = "samsung"
     private val PACKAGE_SAMSUNG_MAIN = "com.samsung.android.lool"
     private val PACKAGE_SAMSUNG_COMPONENT = "com.samsung.android.sm.ui.battery.BatteryActivity"
-    private val PACKAGE_SAMSUNG_COMPONENT_2 = "com.samsung.android.sm.battery.ui.BatteryActivity"
+    private val PACKAGE_SAMSUNG_COMPONENT_2 = "com.samsung.android.sm.battery.ui.usage.CheckableAppListActivity"
+    private val PACKAGE_SAMSUNG_COMPONENT_3 = "com.samsung.android.sm.battery.ui.usage.CheckableAppListActivity"
 
     /***
      * One plus
@@ -95,258 +96,207 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_ONE_PLUS_MAIN = "com.oneplus.security"
     private val PACKAGE_ONE_PLUS_COMPONENT = "com.oneplus.security.chainlaunch.view.ChainLaunchAppListActivity"
 
-    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(PACKAGE_ASUS_MAIN, PACKAGE_XIAOMI_MAIN, PACKAGE_LETV_MAIN, PACKAGE_HONOR_MAIN, PACKAGE_OPPO_MAIN,
-            PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN, PACKAGE_SAMSUNG_MAIN, PACKAGE_ONE_PLUS_MAIN)
+    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(
+            PACKAGE_ASUS_MAIN,
+            PACKAGE_XIAOMI_MAIN,
+            PACKAGE_LETV_MAIN,
+            PACKAGE_HONOR_MAIN,
+            PACKAGE_OPPO_MAIN,
+            PACKAGE_OPPO_FALLBACK,
+            PACKAGE_VIVO_MAIN,
+            PACKAGE_VIVO_FALLBACK,
+            PACKAGE_NOKIA_MAIN,
+            PACKAGE_HUAWEI_MAIN,
+            PACKAGE_SAMSUNG_MAIN,
+            PACKAGE_ONE_PLUS_MAIN
+    )
 
-    fun getAutoStartPermission(context: Context): Boolean {
+    /**
+     * It will attempt to open the specific manufacturer settings screen with the autostart permission
+     * If [open] is changed to false it will just check the screen existence
+     *
+     * @param context
+     * @param open, if true it will attempt to open the activity, otherwise it will just check its existence
+     * @return true if the activity was opened or is confirmed that it exists (depending on [open]]), false otherwise
+     */
+    fun getAutoStartPermission(context: Context, open: Boolean = true): Boolean {
 
-        when (Build.BRAND.toLowerCase(Locale.getDefault())) {
+        when (Build.BRAND.toLowerCase(Locale.ROOT)) {
 
-            BRAND_ASUS -> return autoStartAsus(context)
+            BRAND_ASUS -> return autoStartAsus(context, open)
 
-            BRAND_XIAOMI, BRAND_XIAOMI_POCO, BRAND_XIAOMI_REDMI -> return autoStartXiaomi(context)
+            BRAND_XIAOMI, BRAND_XIAOMI_POCO, BRAND_XIAOMI_REDMI -> return autoStartXiaomi(context, open)
 
-            BRAND_LETV -> return autoStartLetv(context)
+            BRAND_LETV -> return autoStartLetv(context, open)
 
-            BRAND_HONOR -> return autoStartHonor(context)
+            BRAND_HONOR -> return autoStartHonor(context, open)
 
-            BRAND_HUAWEI -> return autoStartHuawei(context)
+            BRAND_HUAWEI -> return autoStartHuawei(context, open)
 
-            BRAND_OPPO -> return autoStartOppo(context)
+            BRAND_OPPO -> return autoStartOppo(context, open)
 
-            BRAND_VIVO -> return autoStartVivo(context)
+            BRAND_VIVO -> return autoStartVivo(context, open)
 
-            BRAND_NOKIA -> return autoStartNokia(context)
+            BRAND_NOKIA -> return autoStartNokia(context, open)
 
-            BRAND_SAMSUNG -> return autoStartSamsung(context)
+            BRAND_SAMSUNG -> return autoStartSamsung(context, open)
 
-            BRAND_ONE_PLUS -> return autoStartOnePlus(context)
+            BRAND_ONE_PLUS -> return autoStartOnePlus(context, open)
 
             else -> {
                 return false
             }
         }
-
     }
 
+    /**
+     * Checks whether the autostart permission is present in the manufacturer and supported by the library
+     *
+     * @param context
+     * @return true if autostart permission is present in the manufacturer and supported by the library, false otherwise
+     */
     fun isAutoStartPermissionAvailable(context: Context): Boolean {
-
         val packages: List<ApplicationInfo>
         val pm = context.packageManager
         packages = pm.getInstalledApplications(0)
         for (packageInfo in packages) {
-            if (PACKAGES_TO_CHECK_FOR_PERMISSION.contains(packageInfo.packageName)) {
-                return true
-            }
+            if (PACKAGES_TO_CHECK_FOR_PERMISSION.contains(packageInfo.packageName)
+                    && getAutoStartPermission(context, false)
+            ) return true
         }
         return false
     }
 
-    private fun autoStartXiaomi(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_XIAOMI_MAIN)) {
-            try {
-                startIntent(context, PACKAGE_XIAOMI_MAIN, PACKAGE_XIAOMI_COMPONENT)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return false
-            }
-        } else {
-            return false
-        }
-
-        return true
+    private fun autoStartXiaomi(context: Context, open: Boolean): Boolean {
+        return autoStart(
+                context,
+                listOf(PACKAGE_XIAOMI_MAIN),
+                listOf(getIntent(PACKAGE_XIAOMI_MAIN, PACKAGE_XIAOMI_COMPONENT)),
+                open
+        )
     }
 
-    private fun autoStartAsus(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_ASUS_MAIN)) {
-            try {
-                startIntent(context, PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                try {
-                    startIntent(context, PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT_FALLBACK)
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                    return false
-                }
-            }
-        } else {
-            return false
-        }
-
-        return true
+    private fun autoStartAsus(context: Context, open: Boolean): Boolean {
+        return autoStart(
+                context,
+                listOf(PACKAGE_ASUS_MAIN),
+                listOf(
+                        getIntent(PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT),
+                        getIntent(PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT_FALLBACK)
+                ),
+                open
+        )
     }
 
-    private fun autoStartLetv(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_LETV_MAIN)) {
-            try {
-                startIntent(context, PACKAGE_LETV_MAIN, PACKAGE_LETV_COMPONENT)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return false
-            }
-        } else {
-            return false
-        }
-
-        return true
+    private fun autoStartLetv(context: Context, open: Boolean): Boolean {
+        return autoStart(
+                context,
+                listOf(PACKAGE_LETV_MAIN),
+                listOf(getIntent(PACKAGE_LETV_MAIN, PACKAGE_LETV_COMPONENT)),
+                open
+        )
     }
 
-    private fun autoStartHonor(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_HONOR_MAIN)) {
-            try {
-                startIntent(context, PACKAGE_HONOR_MAIN, PACKAGE_HONOR_COMPONENT)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return false
-            }
-        } else {
-            return false
-        }
-
-        return true
+    private fun autoStartHonor(context: Context, open: Boolean): Boolean {
+        return autoStart(
+                context,
+                listOf(PACKAGE_HONOR_MAIN),
+                listOf(getIntent(PACKAGE_HONOR_MAIN, PACKAGE_HONOR_COMPONENT)),
+                open
+        )
     }
 
-    private fun autoStartHuawei(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_HUAWEI_MAIN)) {
-            try {
-                startIntent(context, PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                try {
-                    startIntent(context, PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT_FALLBACK)
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                    return false
-                }
-            }
-        } else {
-            return false
-        }
-
-        return true
+    private fun autoStartHuawei(context: Context, open: Boolean): Boolean {
+        return autoStart(
+                context,
+                listOf(PACKAGE_HUAWEI_MAIN),
+                listOf(
+                        getIntent(PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT),
+                        getIntent(PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT_FALLBACK)
+                ),
+                open
+        )
     }
 
-    private fun autoStartOppo(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_OPPO_MAIN) || isPackageExists(context, PACKAGE_OPPO_FALLBACK)) {
-            try {
-                startIntent(context, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                try {
-                    startIntent(context, PACKAGE_OPPO_FALLBACK, PACKAGE_OPPO_COMPONENT_FALLBACK)
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                    try {
-                        startIntent(context, PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT_FALLBACK_A)
-                    } catch (exx: Exception) {
-                        exx.printStackTrace()
-                        return launchOppoAppInfo(context)
-                    }
-                }
-            }
-        } else {
-            return launchOppoAppInfo(context)
-        }
-        return true
+    private fun autoStartOppo(context: Context, open: Boolean): Boolean {
+        return if (autoStart(
+                        context,
+                        listOf(PACKAGE_OPPO_MAIN, PACKAGE_OPPO_FALLBACK),
+                        listOf(
+                                getIntent(PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT),
+                                getIntent(PACKAGE_OPPO_FALLBACK, PACKAGE_OPPO_COMPONENT_FALLBACK),
+                                getIntent(PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT_FALLBACK_A)
+                        ),
+                        open
+                )
+        ) true
+        else launchOppoAppInfo(context, open)
     }
 
-    private fun launchOppoAppInfo(context: Context): Boolean {
+    private fun launchOppoAppInfo(context: Context, open: Boolean): Boolean {
         return try {
             val i = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             i.addCategory(Intent.CATEGORY_DEFAULT)
             i.data = Uri.parse("package:${context.packageName}")
-            context.startActivity(i)
-            true
+            if (open) {
+                context.startActivity(i)
+                true
+            } else {
+                isActivityFound(context, i)
+            }
         } catch (exx: Exception) {
             exx.printStackTrace()
             false
         }
     }
 
-    private fun autoStartVivo(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_VIVO_MAIN) || isPackageExists(context, PACKAGE_VIVO_FALLBACK)) {
-            try {
-                startIntent(context, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                try {
-                    startIntent(context, PACKAGE_VIVO_FALLBACK, PACKAGE_VIVO_COMPONENT_FALLBACK)
-                } catch (ex: Exception) {
-                    ex.printStackTrace()
-                    try {
-                        startIntent(context, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT_FALLBACK_A)
-                    } catch (exx: Exception) {
-                        exx.printStackTrace()
-                        return false
-                    }
-                }
-            }
-        } else {
-            return false
-        }
-
-        return true
+    private fun autoStartVivo(context: Context, open: Boolean): Boolean {
+        return autoStart(
+                context,
+                listOf(PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK),
+                listOf(
+                        getIntent(PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT),
+                        getIntent(PACKAGE_VIVO_FALLBACK, PACKAGE_VIVO_COMPONENT_FALLBACK),
+                        getIntent(PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT_FALLBACK_A)
+                ),
+                open
+        )
     }
 
-    private fun autoStartNokia(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_NOKIA_MAIN)) {
-            try {
-                startIntent(context, PACKAGE_NOKIA_MAIN, PACKAGE_NOKIA_COMPONENT)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return false
-            }
-        } else {
-            return false
-        }
-
-        return true
+    private fun autoStartNokia(context: Context, open: Boolean): Boolean {
+        return autoStart(
+                context,
+                listOf(PACKAGE_NOKIA_MAIN),
+                listOf(getIntent(PACKAGE_NOKIA_MAIN, PACKAGE_NOKIA_COMPONENT)),
+                open
+        )
     }
 
-    private fun autoStartSamsung(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_SAMSUNG_MAIN)) {
-            try {
-                startIntent(context, PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT)
-            } catch (a: ActivityNotFoundException) {
-                // Try with the another package component
-                try {
-                    startIntent(context, PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT_2)
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    return false
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return false
-            }
-        } else {
-            return false
-        }
-
-        return true
+    private fun autoStartSamsung(context: Context, open: Boolean): Boolean {
+        return autoStart(
+                context,
+                listOf(PACKAGE_SAMSUNG_MAIN),
+                listOf(
+                        getIntent(PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT),
+                        getIntent(PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT_2),
+                        getIntent(PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT_3)
+                ),
+                open
+        )
     }
 
-    private fun autoStartOnePlus(context: Context): Boolean {
-        if (isPackageExists(context, PACKAGE_ONE_PLUS_MAIN)) {
-            try {
-                startIntent(context, PACKAGE_ONE_PLUS_MAIN, PACKAGE_ONE_PLUS_COMPONENT)
-            } catch (e: Exception) {
-                e.printStackTrace()
-                return false
-            }
-        } else {
-            return false
-        }
-
-        return true
+    private fun autoStartOnePlus(context: Context, open: Boolean): Boolean {
+        return autoStart(
+                context,
+                listOf(PACKAGE_ONE_PLUS_MAIN),
+                listOf(getIntent(PACKAGE_ONE_PLUS_MAIN, PACKAGE_ONE_PLUS_COMPONENT)),
+                open
+        )
     }
 
     @Throws(Exception::class)
-    private fun startIntent(context: Context, packageName: String, componentName: String) {
+    private fun startIntent(context: Context, intent: Intent) {
         try {
-            val intent = Intent()
-            intent.component = ComponentName(packageName, componentName)
             context.startActivity(intent)
         } catch (exception: Exception) {
             exception.printStackTrace()
@@ -367,10 +317,86 @@ class AutoStartPermissionHelper private constructor() {
     }
 
     companion object {
+
         @JvmStatic
         fun getInstance(): AutoStartPermissionHelper {
             return AutoStartPermissionHelper()
         }
+    }
 
+    /**
+     * Generates an intent with the passed package and component name
+     * @param packageName
+     * @param componentName
+     *
+     * @return the intent generated
+     */
+    private fun getIntent(packageName: String, componentName: String): Intent {
+        return Intent().apply {
+            component = ComponentName(packageName, componentName)
+            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+    }
+
+    /**
+     * Will query the passed intent to check whether the Activity really exists
+     *
+     * @param context
+     * @param intent, intent to open an activity
+     *
+     * @return true if activity is found, false otherwise
+     */
+    private fun isActivityFound(context: Context, intent: Intent): Boolean {
+        return context.packageManager.queryIntentActivities(
+                intent, PackageManager.MATCH_DEFAULT_ONLY
+        ).isNotEmpty()
+    }
+
+    /**
+     * Will query the passed list of intents to check whether any of the activities exist
+     *
+     * @param context
+     * @param intents, list of intents to open an activity
+     *
+     * @return true if activity is found, false otherwise
+     */
+    private fun areActivitiesFound(context: Context, intents: List<Intent>): Boolean {
+        return intents.any { isActivityFound(context, it) }
+    }
+
+    /**
+     * Will attempt to open the AutoStart settings activity from the passed list of intents in order.
+     * The first activity found will be opened.
+     *
+     * @param context
+     * @param intents list of intents
+     *
+     * @return true if an activity was opened, false otherwise
+     */
+    private fun openAutoStartScreen(context: Context, intents: List<Intent>): Boolean {
+        intents.forEach {
+            if (isActivityFound(context, it)) {
+                startIntent(context, it)
+                return@openAutoStartScreen true
+            }
+        }
+        return false
+    }
+
+    /**
+     * Will trigger the common autostart permission logic. If [open] is true it will attempt to open the specific
+     * manufacturer setting screen, otherwise it will just check for its existence
+     *
+     * @param context
+     * @param packages, list of known packages of the corresponding manufacturer
+     * @param intents, list of known intents that open the corresponding manufacturer settings screens
+     * @param open, if true it will attempt to open the settings screen, otherwise it just check its existence
+     * @return true if the screen was opened or exists, false if it doesn't exist or could not be opened
+     */
+    private fun autoStart(context: Context, packages: List<String>, intents: List<Intent>, open: Boolean): Boolean {
+        return if (packages.any { isPackageExists(context, it) }) {
+            if (open) openAutoStartScreen(context, intents)
+            else areActivitiesFound(context, intents)
+        } else false
     }
 }
