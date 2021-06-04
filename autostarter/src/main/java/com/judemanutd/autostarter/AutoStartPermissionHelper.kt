@@ -154,15 +154,18 @@ class AutoStartPermissionHelper private constructor() {
      * Checks whether the autostart permission is present in the manufacturer and supported by the library
      *
      * @param context
+     * @param onlyIfSupported if true, the method will only return true if the screen is supported by the library.
+     *          If false, the method will return true as long as the permission exist even if the screen is not supported
+     *          by the library.
      * @return true if autostart permission is present in the manufacturer and supported by the library, false otherwise
      */
-    fun isAutoStartPermissionAvailable(context: Context): Boolean {
+    fun isAutoStartPermissionAvailable(context: Context, onlyIfSupported: Boolean = false): Boolean {
         val packages: List<ApplicationInfo>
         val pm = context.packageManager
         packages = pm.getInstalledApplications(0)
         for (packageInfo in packages) {
             if (PACKAGES_TO_CHECK_FOR_PERMISSION.contains(packageInfo.packageName)
-                    && getAutoStartPermission(context, open = false, newTask = false)
+                    && (!onlyIfSupported || getAutoStartPermission(context, open = false))
             ) return true
         }
         return false
