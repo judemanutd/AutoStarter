@@ -117,31 +117,32 @@ class AutoStartPermissionHelper private constructor() {
      *
      * @param context
      * @param open, if true it will attempt to open the activity, otherwise it will just check its existence
+     * @param newTask, if true when the activity is attempted to be opened it will add FLAG_ACTIVITY_NEW_TASK to the intent
      * @return true if the activity was opened or is confirmed that it exists (depending on [open]]), false otherwise
      */
-    fun getAutoStartPermission(context: Context, open: Boolean = true): Boolean {
+    fun getAutoStartPermission(context: Context, open: Boolean = true, newTask: Boolean = false): Boolean {
 
         when (Build.BRAND.toLowerCase(Locale.ROOT)) {
 
-            BRAND_ASUS -> return autoStartAsus(context, open)
+            BRAND_ASUS -> return autoStartAsus(context, open, newTask)
 
-            BRAND_XIAOMI, BRAND_XIAOMI_POCO, BRAND_XIAOMI_REDMI -> return autoStartXiaomi(context, open)
+            BRAND_XIAOMI, BRAND_XIAOMI_POCO, BRAND_XIAOMI_REDMI -> return autoStartXiaomi(context, open, newTask)
 
-            BRAND_LETV -> return autoStartLetv(context, open)
+            BRAND_LETV -> return autoStartLetv(context, open, newTask)
 
-            BRAND_HONOR -> return autoStartHonor(context, open)
+            BRAND_HONOR -> return autoStartHonor(context, open, newTask)
 
-            BRAND_HUAWEI -> return autoStartHuawei(context, open)
+            BRAND_HUAWEI -> return autoStartHuawei(context, open, newTask)
 
-            BRAND_OPPO -> return autoStartOppo(context, open)
+            BRAND_OPPO -> return autoStartOppo(context, open, newTask)
 
-            BRAND_VIVO -> return autoStartVivo(context, open)
+            BRAND_VIVO -> return autoStartVivo(context, open, newTask)
 
-            BRAND_NOKIA -> return autoStartNokia(context, open)
+            BRAND_NOKIA -> return autoStartNokia(context, open, newTask)
 
-            BRAND_SAMSUNG -> return autoStartSamsung(context, open)
+            BRAND_SAMSUNG -> return autoStartSamsung(context, open, newTask)
 
-            BRAND_ONE_PLUS -> return autoStartOnePlus(context, open)
+            BRAND_ONE_PLUS -> return autoStartOnePlus(context, open, newTask)
 
             else -> {
                 return false
@@ -161,79 +162,79 @@ class AutoStartPermissionHelper private constructor() {
         packages = pm.getInstalledApplications(0)
         for (packageInfo in packages) {
             if (PACKAGES_TO_CHECK_FOR_PERMISSION.contains(packageInfo.packageName)
-                    && getAutoStartPermission(context, false)
+                    && getAutoStartPermission(context, open = false, newTask = false)
             ) return true
         }
         return false
     }
 
-    private fun autoStartXiaomi(context: Context, open: Boolean): Boolean {
+    private fun autoStartXiaomi(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return autoStart(
                 context,
                 listOf(PACKAGE_XIAOMI_MAIN),
-                listOf(getIntent(PACKAGE_XIAOMI_MAIN, PACKAGE_XIAOMI_COMPONENT)),
+                listOf(getIntent(PACKAGE_XIAOMI_MAIN, PACKAGE_XIAOMI_COMPONENT, newTask)),
                 open
         )
     }
 
-    private fun autoStartAsus(context: Context, open: Boolean): Boolean {
+    private fun autoStartAsus(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return autoStart(
                 context,
                 listOf(PACKAGE_ASUS_MAIN),
                 listOf(
-                        getIntent(PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT),
-                        getIntent(PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT_FALLBACK)
+                        getIntent(PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT, newTask),
+                        getIntent(PACKAGE_ASUS_MAIN, PACKAGE_ASUS_COMPONENT_FALLBACK, newTask)
                 ),
                 open
         )
     }
 
-    private fun autoStartLetv(context: Context, open: Boolean): Boolean {
+    private fun autoStartLetv(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return autoStart(
                 context,
                 listOf(PACKAGE_LETV_MAIN),
-                listOf(getIntent(PACKAGE_LETV_MAIN, PACKAGE_LETV_COMPONENT)),
+                listOf(getIntent(PACKAGE_LETV_MAIN, PACKAGE_LETV_COMPONENT, newTask)),
                 open
         )
     }
 
-    private fun autoStartHonor(context: Context, open: Boolean): Boolean {
+    private fun autoStartHonor(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return autoStart(
                 context,
                 listOf(PACKAGE_HONOR_MAIN),
-                listOf(getIntent(PACKAGE_HONOR_MAIN, PACKAGE_HONOR_COMPONENT)),
+                listOf(getIntent(PACKAGE_HONOR_MAIN, PACKAGE_HONOR_COMPONENT, newTask)),
                 open
         )
     }
 
-    private fun autoStartHuawei(context: Context, open: Boolean): Boolean {
+    private fun autoStartHuawei(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return autoStart(
                 context,
                 listOf(PACKAGE_HUAWEI_MAIN),
                 listOf(
-                        getIntent(PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT),
-                        getIntent(PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT_FALLBACK)
+                        getIntent(PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT, newTask),
+                        getIntent(PACKAGE_HUAWEI_MAIN, PACKAGE_HUAWEI_COMPONENT_FALLBACK, newTask)
                 ),
                 open
         )
     }
 
-    private fun autoStartOppo(context: Context, open: Boolean): Boolean {
+    private fun autoStartOppo(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return if (autoStart(
                         context,
                         listOf(PACKAGE_OPPO_MAIN, PACKAGE_OPPO_FALLBACK),
                         listOf(
-                                getIntent(PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT),
-                                getIntent(PACKAGE_OPPO_FALLBACK, PACKAGE_OPPO_COMPONENT_FALLBACK),
-                                getIntent(PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT_FALLBACK_A)
+                                getIntent(PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT, newTask),
+                                getIntent(PACKAGE_OPPO_FALLBACK, PACKAGE_OPPO_COMPONENT_FALLBACK, newTask),
+                                getIntent(PACKAGE_OPPO_MAIN, PACKAGE_OPPO_COMPONENT_FALLBACK_A, newTask)
                         ),
                         open
                 )
         ) true
-        else launchOppoAppInfo(context, open)
+        else launchOppoAppInfo(context, open, newTask)
     }
 
-    private fun launchOppoAppInfo(context: Context, open: Boolean): Boolean {
+    private fun launchOppoAppInfo(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return try {
             val i = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS)
             i.addCategory(Intent.CATEGORY_DEFAULT)
@@ -250,46 +251,46 @@ class AutoStartPermissionHelper private constructor() {
         }
     }
 
-    private fun autoStartVivo(context: Context, open: Boolean): Boolean {
+    private fun autoStartVivo(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return autoStart(
                 context,
                 listOf(PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK),
                 listOf(
-                        getIntent(PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT),
-                        getIntent(PACKAGE_VIVO_FALLBACK, PACKAGE_VIVO_COMPONENT_FALLBACK),
-                        getIntent(PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT_FALLBACK_A)
+                        getIntent(PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT, newTask),
+                        getIntent(PACKAGE_VIVO_FALLBACK, PACKAGE_VIVO_COMPONENT_FALLBACK, newTask),
+                        getIntent(PACKAGE_VIVO_MAIN, PACKAGE_VIVO_COMPONENT_FALLBACK_A, newTask)
                 ),
                 open
         )
     }
 
-    private fun autoStartNokia(context: Context, open: Boolean): Boolean {
+    private fun autoStartNokia(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return autoStart(
                 context,
                 listOf(PACKAGE_NOKIA_MAIN),
-                listOf(getIntent(PACKAGE_NOKIA_MAIN, PACKAGE_NOKIA_COMPONENT)),
+                listOf(getIntent(PACKAGE_NOKIA_MAIN, PACKAGE_NOKIA_COMPONENT, newTask)),
                 open
         )
     }
 
-    private fun autoStartSamsung(context: Context, open: Boolean): Boolean {
+    private fun autoStartSamsung(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return autoStart(
                 context,
                 listOf(PACKAGE_SAMSUNG_MAIN),
                 listOf(
-                        getIntent(PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT),
-                        getIntent(PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT_2),
-                        getIntent(PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT_3)
+                        getIntent(PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT, newTask),
+                        getIntent(PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT_2, newTask),
+                        getIntent(PACKAGE_SAMSUNG_MAIN, PACKAGE_SAMSUNG_COMPONENT_3, newTask)
                 ),
                 open
         )
     }
 
-    private fun autoStartOnePlus(context: Context, open: Boolean): Boolean {
+    private fun autoStartOnePlus(context: Context, open: Boolean, newTask: Boolean): Boolean {
         return autoStart(
                 context,
                 listOf(PACKAGE_ONE_PLUS_MAIN),
-                listOf(getIntent(PACKAGE_ONE_PLUS_MAIN, PACKAGE_ONE_PLUS_COMPONENT)),
+                listOf(getIntent(PACKAGE_ONE_PLUS_MAIN, PACKAGE_ONE_PLUS_COMPONENT, newTask)),
                 open
         )
     }
@@ -328,13 +329,14 @@ class AutoStartPermissionHelper private constructor() {
      * Generates an intent with the passed package and component name
      * @param packageName
      * @param componentName
+     * @param newTask
      *
      * @return the intent generated
      */
-    private fun getIntent(packageName: String, componentName: String): Intent {
+    private fun getIntent(packageName: String, componentName: String, newTask: Boolean): Intent {
         return Intent().apply {
             component = ComponentName(packageName, componentName)
-            flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            if (newTask) flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
     }
 
@@ -400,3 +402,4 @@ class AutoStartPermissionHelper private constructor() {
         } else false
     }
 }
+
