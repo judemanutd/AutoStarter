@@ -95,6 +95,7 @@ class AutoStartPermissionHelper private constructor() {
     private val BRAND_ONE_PLUS = "oneplus"
     private val PACKAGE_ONE_PLUS_MAIN = "com.oneplus.security"
     private val PACKAGE_ONE_PLUS_COMPONENT = "com.oneplus.security.chainlaunch.view.ChainLaunchAppListActivity"
+    private val PACKAGE_ONE_PLUS_ACTION = "com.android.settings.action.BACKGROUND_OPTIMIZE"
 
     private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(
             PACKAGE_ASUS_MAIN,
@@ -295,7 +296,7 @@ class AutoStartPermissionHelper private constructor() {
                 listOf(PACKAGE_ONE_PLUS_MAIN),
                 listOf(getIntent(PACKAGE_ONE_PLUS_MAIN, PACKAGE_ONE_PLUS_COMPONENT, newTask)),
                 open
-        )
+        ) || autoStartFromAction(context, listOf(getIntentFromAction(PACKAGE_ONE_PLUS_ACTION, newTask)), open)
     }
 
     @Throws(Exception::class)
@@ -339,6 +340,19 @@ class AutoStartPermissionHelper private constructor() {
     private fun getIntent(packageName: String, componentName: String, newTask: Boolean): Intent {
         return Intent().apply {
             component = ComponentName(packageName, componentName)
+            if (newTask) flags = Intent.FLAG_ACTIVITY_NEW_TASK
+        }
+    }
+
+    /**
+     * Generates an intent with the passed action
+     * @param intentAction
+     *
+     * @return the intent generated
+     */
+    private fun getIntentFromAction(intentAction: String, newTask: Boolean): Intent {
+        return Intent().apply {
+            action = "com.android.settings.action.BACKGROUND_OPTIMIZE"
             if (newTask) flags = Intent.FLAG_ACTIVITY_NEW_TASK
         }
     }
@@ -403,6 +417,20 @@ class AutoStartPermissionHelper private constructor() {
             if (open) openAutoStartScreen(context, intents)
             else areActivitiesFound(context, intents)
         } else false
+    }
+
+    /**
+     * Will trigger the common autostart permission logic. If [open] is true it will attempt to open the specific
+     * manufacturer setting screen, otherwise it will just check for its existence
+     *
+     * @param context
+     * @param intentActions, list of known intent actions that open the corresponding manufacturer settings screens
+     * @param open, if true it will attempt to open the settings screen, otherwise it just check its existence
+     * @return true if the screen was opened or exists, false if it doesn't exist or could not be opened
+     */
+    private fun autoStartFromAction(context: Context, intentActions: List<Intent>, open: Boolean): Boolean {
+        return if (open) openAutoStartScreen(context, intentActions)
+        else areActivitiesFound(context, intentActions)
     }
 }
 
