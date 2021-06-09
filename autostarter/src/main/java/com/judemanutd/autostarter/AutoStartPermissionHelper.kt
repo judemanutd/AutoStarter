@@ -97,20 +97,8 @@ class AutoStartPermissionHelper private constructor() {
     private val PACKAGE_ONE_PLUS_COMPONENT = "com.oneplus.security.chainlaunch.view.ChainLaunchAppListActivity"
     private val PACKAGE_ONE_PLUS_ACTION = "com.android.settings.action.BACKGROUND_OPTIMIZE"
 
-    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(
-            PACKAGE_ASUS_MAIN,
-            PACKAGE_XIAOMI_MAIN,
-            PACKAGE_LETV_MAIN,
-            PACKAGE_HONOR_MAIN,
-            PACKAGE_OPPO_MAIN,
-            PACKAGE_OPPO_FALLBACK,
-            PACKAGE_VIVO_MAIN,
-            PACKAGE_VIVO_FALLBACK,
-            PACKAGE_NOKIA_MAIN,
-            PACKAGE_HUAWEI_MAIN,
-            PACKAGE_SAMSUNG_MAIN,
-            PACKAGE_ONE_PLUS_MAIN
-    )
+    private val PACKAGES_TO_CHECK_FOR_PERMISSION = listOf(PACKAGE_ASUS_MAIN, PACKAGE_XIAOMI_MAIN, PACKAGE_LETV_MAIN, PACKAGE_HONOR_MAIN, PACKAGE_OPPO_MAIN,
+            PACKAGE_OPPO_FALLBACK, PACKAGE_VIVO_MAIN, PACKAGE_VIVO_FALLBACK, PACKAGE_NOKIA_MAIN, PACKAGE_HUAWEI_MAIN, PACKAGE_SAMSUNG_MAIN, PACKAGE_ONE_PLUS_MAIN)
 
     /**
      * It will attempt to open the specific manufacturer settings screen with the autostart permission
@@ -340,20 +328,21 @@ class AutoStartPermissionHelper private constructor() {
     private fun getIntent(packageName: String, componentName: String, newTask: Boolean): Intent {
         return Intent().apply {
             component = ComponentName(packageName, componentName)
-            if (newTask) flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            if (newTask) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }
 
     /**
      * Generates an intent with the passed action
      * @param intentAction
+     * @param newTask
      *
      * @return the intent generated
      */
     private fun getIntentFromAction(intentAction: String, newTask: Boolean): Intent {
         return Intent().apply {
-            action = "com.android.settings.action.BACKGROUND_OPTIMIZE"
-            if (newTask) flags = Intent.FLAG_ACTIVITY_NEW_TASK
+            action = intentAction
+            if (newTask) addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
         }
     }
 
