@@ -311,9 +311,10 @@ class AutoStartPermissionHelper private constructor() {
 
     companion object {
 
-        @JvmStatic
+        private val myInstance by lazy { AutoStartPermissionHelper() }
+
         fun getInstance(): AutoStartPermissionHelper {
-            return AutoStartPermissionHelper()
+            return myInstance
         }
     }
 
