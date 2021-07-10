@@ -3,36 +3,34 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 ext {
-    bintrayRepo = 'maven'
-    bintrayName = 'autostarter'
 
-    publishedGroupId = 'com.github.judemanutd'
-    libraryName = 'Autostarter'
-    artifact = 'autostarter'
+    PUBLISH_GROUP_ID = "com.github.judemanutd"
+    PUBLISH_VERSION = "1.1.0"
+    PUBLISH_ARTIFACT_ID = "autostarter"
+    PUBLISH_DESCRIPTION = 'A library to help add your app to android autostart'
+    PUBLISH_URL = 'https://github.com/judemanutd/AutoStarter'
+    PUBLISH_LICENSE_NAME = 'MIT'
+    PUBLISH_LICENSE_URL = 'https://opensource.org/licenses/MIT'
 
-    libraryDescription = 'A library to help add your app to android autostart'
+    PUBLISH_DEVELOPER_ID = 'judemanutd'
+    PUBLISH_DEVELOPER_NAME = 'Jude Fernandes'
+    PUBLISH_DEVELOPER_EMAIL = 'jude.manutd@gmail.com'
 
-    siteUrl = 'https://github.com/judemanutd/AutoStarter'
-    gitUrl = 'https://github.com/judemanutd/AutoStarter.git'
+    PUBLISH_SCM_CONNECTION = 'scm:git:github.com/judemanutd/AutoStarter.git'
+    PUBLISH_SCM_DEVELOPER_CONNECTION = 'scm:git:ssh://github.com/judemanutd/AutoStarter.git'
+    PUBLISH_SCM_URL = 'https://github.com/judemanutd/AutoStarter/tree/master'
 
-    libraryVersion = '1.0.9'
-
-    developerId = 'judemanutd'
-    developerName = 'Jude Fernandes'
-    developerEmail = 'jude.manutd@gmail.com'
-
-    licenseName = 'MIT'
-    licenseUrl = 'https://opensource.org/licenses/MIT'
-    allLicenses = ["MIT"]
 }
+
+apply from: "${rootProject.projectDir}/scripts/publish-module.gradle"
 
 android {
     compileSdkVersion 30
     defaultConfig {
         minSdkVersion 14
         targetSdkVersion 30
-        versionCode 9
-        versionName "1.0.9"
+        versionCode 10
+        versionName "1.1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
@@ -50,7 +48,7 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 
-    testImplementation 'junit:junit:4.13'
+    testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -63,6 +61,3 @@ repositories {
 tasks.withType(Javadoc).all {
     enabled = false
 }
-
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/installv1.gradle'
-apply from: 'https://raw.githubusercontent.com/nuuneoi/JCenter/master/bintrayv1.gradle'
