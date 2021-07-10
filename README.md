@@ -1,6 +1,6 @@
 # Autostarter
 
-[![Download](https://api.bintray.com/packages/jude-manutd/maven/autostarter/images/download.svg) ](https://bintray.com/jude-manutd/maven/autostarter/_latestVersion)
+[![](https://jitpack.io/v/judemanutd/AutoStarter.svg)](https://jitpack.io/#judemanutd/AutoStarter)
 [![license](https://img.shields.io/github/license/mashape/apistatus.svg?style=flat-square)](https://opensource.org/licenses/MIT) 
 [![API](https://img.shields.io/badge/API-14%2B-brightgreen.svg?style=flat)](https://android-arsenal.com/api?level=14)
 
@@ -32,7 +32,7 @@ Add this to your module's `build.gradle` file:
 ```groovy
 dependencies {
         // ... other dependencies
-        implementation 'com.github.judemanutd:autostarter:1.0.9'
+        implementation 'com.github.judemanutd:autostarter:1.1.0'
 }
 ```
 
@@ -42,18 +42,24 @@ dependencies {
 <dependency>
     <groupId>com.github.judemanutd</groupId>
     <artifactId>autostarter</artifactId>
-    <version>1.0.9</version>
+    <version>1.1.0</version>
     <type>pom</type>
 </dependency>
 ```
  
- Once you have integrated the library calling the following function will bring up the autostart permission manager of the phone. The function returns a boolean to indicate if the action was as success or a failure.
+ Once you have integrated the library calling the following function will bring up the autostart permission manager of the phone. 
+ The function returns a boolean to indicate if the action was as success or a failure.
+ 
+ Parameters
+ * If true is passed as the second parameter, it will attempt to open the activity, otherwise it will just check its existence
+ * if true is passed as the third parameter, the activity is attempted to be opened it will add FLAG_ACTIVITY_NEW_TASK to the intent
  
  ```kotlin
      AutoStartPermissionHelper.getInstance().getAutoStartPermission(context)
 ```
 
-In order to check if your phone is supported by the library you can call the following command.
+In order to check if your phone is supported by the library you can call the following command. If true is passed as the second parameter, the method will only return true if the screen is supported by the library. 
+If false, the method will return true as long as the permission exist even if the screen is not supported by the library.
  
 ```kotlin
      AutoStartPermissionHelper.getInstance().isAutoStartPermissionAvailable(context)
